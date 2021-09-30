@@ -36,5 +36,6 @@ func (p *PlayerServer) showScore(w http.ResponseWriter, r *http.Request) {
 }
 
 func (p *PlayerServer) processWin(w http.ResponseWriter) {
+	p.Store.RecordWin("Bob")
 	w.WriteHeader(http.StatusAccepted)
 }
