@@ -19,8 +19,5 @@ func TestGETPlayers(t *testing.T) {
 		if got != want {
 			t.Errorf("got %q, want %q", got, want)
 		}
-		http.ListenAndServe(":5000", http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
-			
-		}))
 	})
 }
