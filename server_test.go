@@ -81,10 +81,15 @@ func assertStatusCode(t testing.TB, got, want int) {
 }
 
 type StubPlayerScore struct {
-	scores map[string]int
+	scores   map[string]int
+	winCalls []string
 }
 
 func (s *StubPlayerScore) GetPlayerScore(name string) int {
 	score := s.scores[name]
 	return score
+}
+
+func (s *StubPlayerScore) RecordWin(name string) {
+	s.winCalls = append(s.winCalls, name)
 }
