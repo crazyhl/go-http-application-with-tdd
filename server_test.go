@@ -109,3 +109,17 @@ func (s *StubPlayerScore) GetPlayerScore(name string) int {
 func (s *StubPlayerScore) RecordWin(name string) {
 	s.winCalls = append(s.winCalls, name)
 }
+
+func TestLeague(t *testing.T) {
+	store := StubPlayerScore{}
+	server := &PlayerServer{&store}
+
+	t.Run("it returns 200 on /league", func(t *testing.T) {
+		request, _ := http.NewRequest(http.MethodGet, "/league", nil)
+		response := httptest.NewRecorder()
+
+		server.ServeHTTP(response, request)
+
+		assertStatusCode(t, response.Code, http.StatusOK)
+	})
+}
