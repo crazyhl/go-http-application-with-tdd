@@ -7,6 +7,7 @@ import (
 )
 
 func main() {
-	server := &gohttpapplicationwithtdd.PlayerServer{Store: gohttpapplicationwithtdd.NewInMemoryPlayerStore()}
+	store := gohttpapplicationwithtdd.NewInMemoryPlayerStore()
+	server := gohttpapplicationwithtdd.NewPlayerServer(store)
 	log.Fatal(http.ListenAndServe(":5000", server))
 }
