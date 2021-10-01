@@ -16,6 +16,11 @@ type PlayerServer struct {
 	http.Handler
 }
 
+type Player struct {
+	Name string
+	Wins int
+}
+
 func NewPlayerServer(store PlayerStore) *PlayerServer {
 	p := new(PlayerServer)
 
