@@ -52,11 +52,7 @@ func (p *PlayerServer) processWin(w http.ResponseWriter, r *http.Request, player
 }
 
 func (p *PlayerServer) leagueHandler(w http.ResponseWriter, r *http.Request) {
-	leagueTable := []Player{
-		{"Chris", 20},
-	}
-
-	json.NewEncoder(w).Encode(leagueTable)
+	json.NewEncoder(w).Encode(p.getLeagueTable())
 
 	w.WriteHeader(http.StatusOK)
 }
@@ -69,5 +65,11 @@ func (p *PlayerServer) playersHandler(w http.ResponseWriter, r *http.Request) {
 		p.showScore(w, r, player)
 	case http.MethodPost:
 		p.processWin(w, r, player)
+	}
+}
+
+func (p *PlayerServer) getLeagueTable() []Player {
+	return []Player{
+		{"Chris", 20},
 	}
 }
