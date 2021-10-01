@@ -1,6 +1,7 @@
 package go_http_application_with_tdd
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strings"
@@ -51,6 +52,12 @@ func (p *PlayerServer) processWin(w http.ResponseWriter, r *http.Request, player
 }
 
 func (p *PlayerServer) leagueHandler(w http.ResponseWriter, r *http.Request) {
+	leagueTable := []Player{
+		{"Chris", 20},
+	}
+
+	json.NewEncoder(w).Encode(leagueTable)
+
 	w.WriteHeader(http.StatusOK)
 }
 
