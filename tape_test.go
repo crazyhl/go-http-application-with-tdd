@@ -9,7 +9,7 @@ func TestTape_Write(t *testing.T) {
 	file, clean := createTempFile(t, "12345")
 	defer clean()
 
-	tape := &Tape{file}
+	tape := &tape{file}
 
 	tape.Write([]byte("abc"))
 
