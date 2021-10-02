@@ -1,13 +1,12 @@
 package go_http_application_with_tdd
 
 import (
-	"io"
 	"io/ioutil"
 	"os"
 	"testing"
 )
 
-func createTempFile(t testing.TB, initialData string) (io.ReadWriteSeeker, func()) {
+func createTempFile(t testing.TB, initialData string) (*os.File, func()) {
 	t.Helper()
 	tmpFile, err := ioutil.TempFile("", "db")
 	if err != nil {
