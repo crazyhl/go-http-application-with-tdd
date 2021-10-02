@@ -5,7 +5,7 @@ import (
 )
 
 type FileSystemPlayerStore struct {
-	database io.ReadSeeker
+	database io.ReadWriteSeeker
 }
 
 func (f *FileSystemPlayerStore) GetLeague() []Player {
@@ -24,4 +24,8 @@ func (f *FileSystemPlayerStore) GetPlayerScore(name string) int {
 	}
 
 	return wins
+}
+
+func (f *FileSystemPlayerStore) RecordWin(name string) {
+
 }
