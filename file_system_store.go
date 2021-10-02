@@ -2,19 +2,19 @@ package go_http_application_with_tdd
 
 import (
 	"encoding/json"
-	"io"
+	"os"
 )
 
 type FileSystemPlayerStore struct {
-	Database io.Writer
+	Database *json.Encoder
 	League   League
 }
 
-func NewFileSystemPlayerStore(database io.ReadWriteSeeker) *FileSystemPlayerStore {
-	database.Seek(0, 0)
-	league, _ := NewLeague(database)
+func NewFileSystemPlayerStore(file *os.File) *FileSystemPlayerStore {
+	file.Seek(0, 0)
+	league, _ := NewLeague(file)
 	return &FileSystemPlayerStore{
-		Database: database,
+		Database: json.NewEncoder(&tape{file}),
 		League:   league,
 	}
 }
@@ -45,5 +45,5 @@ func (f *FileSystemPlayerStore) RecordWin(name string) {
 		})
 	}
 
-	json.NewEncoder(f.Database).Encode(f.League)
+	f.Database.Encode(f.League)
 }
