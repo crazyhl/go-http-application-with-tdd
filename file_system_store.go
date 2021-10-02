@@ -2,6 +2,7 @@ package go_http_application_with_tdd
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 )
 
@@ -10,13 +11,17 @@ type FileSystemPlayerStore struct {
 	League   League
 }
 
-func NewFileSystemPlayerStore(file *os.File) *FileSystemPlayerStore {
+func NewFileSystemPlayerStore(file *os.File) (*FileSystemPlayerStore, error) {
 	file.Seek(0, 0)
-	league, _ := NewLeague(file)
+	league, err := NewLeague(file)
+	if err != nil {
+		return nil, fmt.Errorf("problem loading player store from file %s, %v", file.Name(), err)
+	}
+
 	return &FileSystemPlayerStore{
 		Database: json.NewEncoder(&tape{file}),
 		League:   league,
-	}
+	}, nil
 }
 
 func (f *FileSystemPlayerStore) GetLeague() League {
