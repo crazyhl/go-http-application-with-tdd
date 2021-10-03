@@ -25,6 +25,6 @@ func main() {
 		log.Fatalf("problem creating file system player store, %v", err)
 	}
 
-	game := go_http_application_with_tdd.CLI{store, os.Stdin}
+	game := go_http_application_with_tdd.NewCLI(store, os.Stdin)
 	game.PlayPoker()
 }
