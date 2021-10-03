@@ -1,13 +1,26 @@
-package go_http_application_with_tdd
+package go_http_application_with_tdd_test
 
-import "testing"
+import (
+	"strings"
+	"testing"
+)
 
 func TestCli(t *testing.T) {
-	playerStore := &StubPlayerScore{}
-	cli := &CLI{playerStore}
-	cli.PlayPoker()
+	t.Run("record chris win from user input", func(t *testing.T) {
+		in := strings.NewReader("Chris wins\n")
+		playerStore := &StubPlayerScore{}
+		cli := &CLI{playerStore, in}
+		cli.PlayPoker()
 
-	if len(playerStore.winCalls) != 1 {
-		t.Fatalf("expected a win call but didn't get any")
-	}
+		assertPlayerWin(t, playerStore, "Chris")
+	})
+
+	t.Run("record cleo win from user input", func(t *testing.T) {
+		in := strings.NewReader("Cleo wins\n")
+		playerStore := &StubPlayerScore{}
+		cli := &CLI{playerStore, in}
+		cli.PlayPoker()
+
+		assertPlayerWin(t, playerStore, "Cleo")
+	})
 }

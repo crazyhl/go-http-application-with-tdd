@@ -6,7 +6,6 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
-	"reflect"
 	"testing"
 )
 
@@ -26,8 +25,8 @@ func TestGETPlayers(t *testing.T) {
 
 		server.ServeHTTP(response, request)
 
-		assertStatusCode(t, response.Code, http.StatusOK)
-		assertResponseBody(t, response.Body.String(), "20")
+		AssertStatusCode(t, response.Code, http.StatusOK)
+		AssertResponseBody(t, response.Body.String(), "20")
 	})
 
 	t.Run("returns Floyd's score", func(t *testing.T) {
@@ -36,8 +35,8 @@ func TestGETPlayers(t *testing.T) {
 
 		server.ServeHTTP(response, request)
 
-		assertStatusCode(t, response.Code, http.StatusOK)
-		assertResponseBody(t, response.Body.String(), "10")
+		AssertStatusCode(t, response.Code, http.StatusOK)
+		AssertResponseBody(t, response.Body.String(), "10")
 	})
 
 	t.Run("returns 404 on missing players", func(t *testing.T) {
@@ -46,7 +45,7 @@ func TestGETPlayers(t *testing.T) {
 
 		server.ServeHTTP(response, request)
 
-		assertStatusCode(t, response.Code, http.StatusNotFound)
+		AssertStatusCode(t, response.Code, http.StatusNotFound)
 	})
 }
 
@@ -65,7 +64,7 @@ func TestStoreWins(t *testing.T) {
 
 		server.ServeHTTP(response, request)
 
-		assertStatusCode(t, response.Code, http.StatusAccepted)
+		AssertStatusCode(t, response.Code, http.StatusAccepted)
 
 		if len(store.winCalls) != 1 {
 			t.Errorf("got %d calls to RecordWin want %d", len(store.winCalls), 1)
@@ -87,39 +86,6 @@ func newPostWinRequest(name string) *http.Request {
 	return req
 }
 
-func assertResponseBody(t testing.TB, got, want string) {
-	t.Helper()
-	if got != want {
-		t.Errorf("response body is wrong, got %q, want %q", got, want)
-	}
-}
-
-func assertStatusCode(t testing.TB, got, want int) {
-	t.Helper()
-	if got != want {
-		t.Errorf("did not get correct status, got %d,want %d", got, want)
-	}
-}
-
-type StubPlayerScore struct {
-	scores   map[string]int
-	winCalls []string
-	league   League
-}
-
-func (s *StubPlayerScore) GetPlayerScore(name string) int {
-	score := s.scores[name]
-	return score
-}
-
-func (s *StubPlayerScore) RecordWin(name string) {
-	s.winCalls = append(s.winCalls, name)
-}
-
-func (s *StubPlayerScore) GetLeague() League {
-	return s.league
-}
-
 func TestLeague(t *testing.T) {
 	store := StubPlayerScore{}
 	server := NewPlayerServer(&store)
@@ -138,7 +104,7 @@ func TestLeague(t *testing.T) {
 			t.Fatalf("Unable to parse response from server %q into slice of Player, '%v'", response.Body, err)
 		}
 
-		assertStatusCode(t, response.Code, http.StatusOK)
+		AssertStatusCode(t, response.Code, http.StatusOK)
 	})
 
 	t.Run("it returns the league table as JSON", func(t *testing.T) {
@@ -158,18 +124,12 @@ func TestLeague(t *testing.T) {
 
 		got := getLeagueFromResponse(t, response.Body)
 
-		assertStatusCode(t, response.Code, http.StatusOK)
+		AssertStatusCode(t, response.Code, http.StatusOK)
 
-		assertLeague(t, got, wantedLeague)
+		AssertLeague(t, got, wantedLeague)
 
-		assertContentType(t, response, jsonContentType)
+		AssertContentType(t, response, jsonContentType)
 	})
-}
-
-func assertContentType(t *testing.T, response *httptest.ResponseRecorder, want string) {
-	if response.Result().Header.Get("content-type") != want {
-		t.Errorf("response did not have content-type of %s, got %v", want, response.Result().Header)
-	}
 }
 
 func getLeagueFromResponse(t testing.TB, body io.Reader) (league []Player) {
@@ -181,13 +141,6 @@ func getLeagueFromResponse(t testing.TB, body io.Reader) (league []Player) {
 	}
 
 	return
-}
-
-func assertLeague(t testing.TB, got, want []Player) {
-	t.Helper()
-	if !reflect.DeepEqual(got, want) {
-		t.Errorf("got %v want %v", got, want)
-	}
 }
 
 func newLeagueRequest() *http.Request {
