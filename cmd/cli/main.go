@@ -20,6 +20,6 @@ func main() {
 	}
 	defer close()
 
-	game := go_http_application_with_tdd.NewCLI(store, os.Stdin)
+	game := go_http_application_with_tdd.NewCLI(store, os.Stdin, go_http_application_with_tdd.BlindAlerterFunc(go_http_application_with_tdd.StdOutAlerter))
 	game.PlayPoker()
 }
