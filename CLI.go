@@ -21,10 +21,10 @@ func NewCLI(store PlayerStore, in io.Reader, alerter BlindAlerter) *CLI {
 	}
 }
 
-func (c *CLI) PlayPoker() {
-	c.scheduleBlindAlerts()
-	userInput := c.readline()
-	c.playerStore.RecordWin(extractWinner(userInput))
+func (cli *CLI) PlayPoker() {
+	cli.scheduleBlindAlerts()
+	userInput := cli.readline()
+	cli.playerStore.RecordWin(extractWinner(userInput))
 }
 
 func (cli *CLI) scheduleBlindAlerts() {
@@ -40,7 +40,7 @@ func extractWinner(userInput string) string {
 	return strings.Replace(userInput, " wins", "", 1)
 }
 
-func (c *CLI) readline() string {
-	c.in.Scan()
-	return c.in.Text()
+func (cli *CLI) readline() string {
+	cli.in.Scan()
+	return cli.in.Text()
 }
