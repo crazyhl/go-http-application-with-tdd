@@ -13,17 +13,12 @@ func main() {
 	fmt.Println("Let's play poker")
 	fmt.Println("Type {Name} wins to record a win")
 
-	db, err := os.OpenFile(dbFileName, os.O_RDWR|os.O_CREATE, 0666)
+	store, close, err := go_http_application_with_tdd.FileSystemPlayerStoreFromFile(dbFileName)
 
 	if err != nil {
-		log.Fatalf("problem opening %s %v", dbFileName, err)
+		log.Fatal(err)
 	}
-
-	store, err := go_http_application_with_tdd.NewFileSystemPlayerStore(db)
-
-	if err != nil {
-		log.Fatalf("problem creating file system player store, %v", err)
-	}
+	defer close()
 
 	game := go_http_application_with_tdd.NewCLI(store, os.Stdin)
 	game.PlayPoker()

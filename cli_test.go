@@ -24,4 +24,5 @@ func TestCli(t *testing.T) {
 
 		go_http_application_with_tdd.AssertPlayerWin(t, playerStore, "Cleo")
 	})
+
 }
